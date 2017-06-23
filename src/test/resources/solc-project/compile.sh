@@ -1,1 +1,1 @@
-mvn339 solc.plugins:solc-mojo:1.0-SNAPSHOT:compile -X
+mvn350 clean solc:check solc:compile solc:wrap && sudo ./chown.sh

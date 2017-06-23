@@ -17,7 +17,7 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     private Boolean overwrite;
 
-    @Parameter
+    @Parameter(defaultValue = "true")
     private Boolean abi;
 
     @Parameter
@@ -32,7 +32,7 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     @Parameter
     private Boolean asmjson;
 
-    @Parameter
+    @Parameter(defaultValue = "true")
     private Boolean bin;
 
     @Parameter
@@ -42,19 +42,72 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     private Boolean hashes;
 
     @Parameter
-    private FileSet fileset;
+    private FileSet[] sources;
 
     @Parameter(defaultValue = "${project.build.directory}")
     private File outputDirectory;
 
+    @Parameter
+    private String wrapOutputDirectory;
+    
+    @Parameter(defaultValue = "${project.groupId}")
+    private String targetPackage;
 
+    @Parameter(defaultValue = "http://localhost:8545")
+    private String web3Endpoint;
 
-    public FileSet getFileset() {
-        return fileset;
+    @Parameter
+    private String accountPublicKey;
+
+    @Parameter
+    private String accountPassword;
+
+    public void setWrapOutputDirectory(String wrapOutputDirectory) {
+        this.wrapOutputDirectory = wrapOutputDirectory;
     }
 
-    public void setFileset(FileSet fileset) {
-        this.fileset = fileset;
+    public void setTargetPackage(String targetPackage) {
+        this.targetPackage = targetPackage;
+    }
+
+    public String getWeb3Endpoint() {
+        return web3Endpoint;
+    }
+
+    public String getAccountPassword() {
+        return accountPassword;
+    }
+
+    public void setAccountPassword(String accountPassword) {
+        this.accountPassword = accountPassword;
+    }
+
+    public void setWeb3Endpoint(String web3Endpoint) {
+        this.web3Endpoint = web3Endpoint;
+    }
+
+    public String getAccountPublicKey() {
+        return accountPublicKey;
+    }
+
+    public void setAccountPublicKey(String accountPublicKey) {
+        this.accountPublicKey = accountPublicKey;
+    }
+
+    public String getTargetPackage() {
+        return targetPackage;
+    }
+
+    public String getWrapOutputDirectory() {
+        return wrapOutputDirectory;
+    }
+
+    public FileSet[] getSources() {
+        return sources;
+    }
+
+    public void setSources(FileSet[] sources) {
+        this.sources = sources;
     }
 
     public File getOutputDirectory() {

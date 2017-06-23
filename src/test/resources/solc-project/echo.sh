@@ -1,1 +1,1 @@
-mvn339 solc.plugins:solc-mojo:1.0-SNAPSHOT:check -X
+mvn350 com.jeecookbook:solc-maven-plugin:1.0-SNAPSHOT:check -X

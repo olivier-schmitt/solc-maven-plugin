@@ -20,6 +20,11 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import org.apache.maven.shared.model.fileset.FileSet;
+import org.apache.maven.shared.model.fileset.util.FileSetManager;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 
 /**
  * Goal which compile SOL files.
@@ -28,19 +33,12 @@ import org.apache.maven.shared.model.fileset.FileSet;
 @Mojo( name = "compile")
 public class CompileMojo extends AbstractSolcMojo {
 
+    protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     public void execute() throws MojoExecutionException {
         try {
             getLog().debug("Entering compile mojo.");
-            getLog().debug("Overwrite :" + getOverwrite());
-            FileSet fileset = getFileset();
-            if(fileset != null) {
-                String[] includes = fileset.getIncludesArray();
-                for(String include:includes){
-                    getLog().debug(include);
-                }
-
-            }
+            processSources();
 
         } finally {
             getLog().debug( "Exiting compile mojo." );
@@ -48,7 +46,97 @@ public class CompileMojo extends AbstractSolcMojo {
     }
 
 
-    private String buildCmdVersion() {
-        return getCompilerCmdPath() + " " + "--version";
+    protected void processSources() throws MojoExecutionException {
+        FileSet[] sources = getSources();
+        if(sources != null) {
+            FileSetManager fileSetManager = new FileSetManager();
+            for(FileSet sourceSet:sources){
+                processSourceSet(fileSetManager, sourceSet);
+            }
+        } else {
+            getLog().info("Nothing to compile.");
+        }
+    }
+
+    protected void processSourceSet(FileSetManager fileSetManager, FileSet sourceSet)
+            throws MojoExecutionException {
+
+        String basePath = sourceSet.getDirectory();
+        String[] includedFiles = fileSetManager.getIncludedFiles( sourceSet );
+
+        String cmd = buildCmd("target");
+
+        StringBuilder cmdBuilder = new StringBuilder(cmd);
+        cmdBuilder.append(" ");
+
+        for(String include:includedFiles){
+            cmdBuilder
+                    .append( basePath)
+                    .append(File.separator)
+                    .append(include)
+                    .append(" ");
+
+            getLog().debug("Included file :" + basePath + File.separator + include);
+        }
+        String cmdExec = cmdBuilder.toString();
+
+        getLog().debug(" Cmd is " + cmdExec);
+
+        CompilerBridge.CompilerResult compilerResult = compilerBridge.executeCmd(cmdExec);
+        if(compilerResult.isSuccess()){
+            getLog().info(compilerResult.getOutput());
+        } else {
+            if(compilerResult.getThrowable() != null){
+                //getLog().error(compilerResult.getThrowable().getMessage());
+                getLog().error(compilerResult.getThrowable());
+            }
+            getLog().error(compilerResult.getOutput());
+            getLog().error("Compiler exit with status " +compilerResult.getStatus());
+        }
+
+    }
+
+
+    protected String buildCmd(String basePath) {
+        StringBuilder cmBuilder = new StringBuilder();
+        cmBuilder.append(getCompilerCmdPath())
+                .append(" ")
+                ;
+        String outputDir = basePath + File.separator + "solc";
+
+        new File(outputDir).mkdirs();
+
+        cmBuilder.append("-o ")
+                .append(outputDir)
+                .append(" ");
+
+        if(Boolean.TRUE.equals(getOverwrite())){
+            cmBuilder.append("--overwrite").append(" ");
+        }
+        if(Boolean.TRUE.equals(getAbi())){
+            cmBuilder.append("--abi").append(" ");
+        }
+        if(Boolean.TRUE.equals(getAsm())){
+            cmBuilder.append("--asm").append(" ");
+        }
+        if(Boolean.TRUE.equals(getAsmjson())){
+            cmBuilder.append("--asm-json").append(" ");
+        }
+        if(Boolean.TRUE.equals(getAst())){
+            cmBuilder.append("--ast").append(" ");
+        }
+        if(Boolean.TRUE.equals(getAstjson())){
+            cmBuilder.append("--ast-json").append(" ");
+        }
+        if(Boolean.TRUE.equals(getBin())){
+            cmBuilder.append("--bin").append(" ");
+        }
+        if(Boolean.TRUE.equals(getFormal())){
+            cmBuilder.append("--formal").append(" ");
+        }
+        if(Boolean.TRUE.equals(getHashes())){
+            cmBuilder.append("--hashes").append(" ");
+        }
+        return cmBuilder.toString();
     }
 }
