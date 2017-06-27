@@ -38,6 +38,12 @@
                             </includes>
                         </fileset>
                         <fileset>
+                            <directory>src/contracts/udemy</directory>
+                            <includes>
+                                <include>**/*.sol</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
                             <directory>src/contracts/solidity</directory>
                             <includes>
                                 <include>**/*.sol</include>

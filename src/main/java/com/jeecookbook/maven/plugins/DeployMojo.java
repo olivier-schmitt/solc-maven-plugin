@@ -18,9 +18,20 @@ package com.jeecookbook.maven.plugins;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.Ethereum;
+import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
 
 /**
  * Goal which deploy contracts.
@@ -36,5 +47,48 @@ public class DeployMojo extends AbstractSolcMojo {
             getLog().debug( "Exiting check mojo." );
         }
     }
+
+
+    protected BigInteger getNonce(Ethereum parity,String address) throws Exception {
+        EthGetTransactionCount ethGetTransactionCount = parity.ethGetTransactionCount(
+                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+
+        return ethGetTransactionCount.getTransactionCount();
+    }
+
+
+    protected String load(String filePath) throws URISyntaxException, IOException {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(filePath);
+        byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
+        return new String(bytes);
+    }
+
+    private String sendCreateContractTransaction(
+            Ethereum parity,
+            String address,
+            BigInteger gasPrice,
+            BigInteger gasLimit,
+            String binary) throws Exception {
+
+        BigInteger nonce = getNonce(parity,address);
+
+        String encodedConstructor =
+                FunctionEncoder.encodeConstructor(Collections.singletonList(new Utf8String("")));
+
+        Transaction transaction = Transaction.createContractTransaction(
+                address,
+                nonce,
+                gasPrice,
+                gasLimit,
+                BigInteger.ZERO,
+                binary + encodedConstructor);
+
+        org.web3j.protocol.core.methods.response.EthSendTransaction
+                transactionResponse = parity.ethSendTransaction(transaction)
+                .sendAsync().get();
+
+        return transactionResponse.getTransactionHash();
+    }
+
 
 }
