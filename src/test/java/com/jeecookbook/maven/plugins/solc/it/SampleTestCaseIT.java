@@ -1,4 +1,4 @@
-package com.jeecookbook.maven.plugins.it;
+package com.jeecookbook.maven.plugins.solc.it;
 
 import junit.framework.TestCase;
 import org.apache.maven.it.VerificationException;

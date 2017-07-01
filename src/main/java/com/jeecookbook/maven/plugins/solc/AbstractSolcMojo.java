@@ -1,10 +1,14 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
+import com.jeecookbook.maven.plugins.solc.eth.model.Account;
+import com.jeecookbook.maven.plugins.solc.eth.model.Wallet;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.model.fileset.FileSet;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractSolcMojo extends AbstractMojo {
 
@@ -47,20 +51,36 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}")
     private File outputDirectory;
 
+    @Parameter(defaultValue = "http://localhost:8545")
+    private String web3Endpoint;
+
+    @Parameter
+    private Account account = new Account();
+
+    @Parameter
+    private Wallet wallet = new Wallet();
+
     @Parameter
     private String wrapOutputDirectory;
     
     @Parameter(defaultValue = "${project.groupId}")
     private String targetPackage;
 
-    @Parameter(defaultValue = "http://localhost:8545")
-    private String web3Endpoint;
+    public Account getAccount() {
+        return account;
+    }
 
-    @Parameter
-    private String accountPublicKey;
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
-    @Parameter
-    private String accountPassword;
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
 
     public void setWrapOutputDirectory(String wrapOutputDirectory) {
         this.wrapOutputDirectory = wrapOutputDirectory;
@@ -74,24 +94,9 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
         return web3Endpoint;
     }
 
-    public String getAccountPassword() {
-        return accountPassword;
-    }
-
-    public void setAccountPassword(String accountPassword) {
-        this.accountPassword = accountPassword;
-    }
 
     public void setWeb3Endpoint(String web3Endpoint) {
         this.web3Endpoint = web3Endpoint;
-    }
-
-    public String getAccountPublicKey() {
-        return accountPublicKey;
-    }
-
-    public void setAccountPublicKey(String accountPublicKey) {
-        this.accountPublicKey = accountPublicKey;
     }
 
     public String getTargetPackage() {
@@ -204,5 +209,20 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
 
     public void setCompilerCmdPath(String compilerCmdPath) {
         this.compilerCmdPath = compilerCmdPath;
+    }
+
+    protected FileSet createDefaultBinsFileSet() {
+        FileSet solcFileSet = new FileSet();
+        solcFileSet.setDirectory(getOutputDirectory()+"/solc");
+        List<String> solcBins = new ArrayList<String>();
+        solcBins.add("**/*.abi");
+        solcBins.add("**/*.bin");
+        solcFileSet.setIncludes(solcBins);
+        return solcFileSet;
+    }
+
+    protected String extractSolFile(String file) {
+        int index = file.lastIndexOf(".");
+        return file.substring(0,index);
     }
 }

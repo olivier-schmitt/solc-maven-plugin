@@ -1,7 +1,4 @@
-package com.jeecookbook.maven.plugins;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
+package com.jeecookbook.maven.plugins.solc;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

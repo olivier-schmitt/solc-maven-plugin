@@ -1,4 +1,4 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
 import org.apache.maven.plugin.logging.Log;
 

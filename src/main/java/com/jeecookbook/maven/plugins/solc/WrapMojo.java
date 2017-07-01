@@ -1,4 +1,4 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -22,12 +22,8 @@ import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
 import org.web3j.codegen.SolidityFunctionWrapperGenerator;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -115,20 +111,7 @@ public class WrapMojo extends AbstractSolcMojo {
         return binsForSols;
     }
 
-    protected FileSet createDefaultBinsFileSet() {
-        FileSet solcFileSet = new FileSet();
-        solcFileSet.setDirectory("target/solc");
-        List<String> solcBins = new ArrayList<String>();
-        solcBins.add("**/*.abi");
-        solcBins.add("**/*.bin");
-        solcFileSet.setIncludes(solcBins);
-        return solcFileSet;
-    }
 
-    protected String extractSolFile(String file) {
-        int index = file.lastIndexOf(".");
-        return file.substring(0,index);
-    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -22,9 +22,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 
 /**
  * Goal which compile SOL files.

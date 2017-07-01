@@ -1,5 +1,7 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
+import com.jeecookbook.maven.plugins.solc.CompileMojo;
+import com.jeecookbook.maven.plugins.solc.CompilerBridge;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
@@ -9,7 +11,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;

@@ -1,10 +1,9 @@
-package com.jeecookbook.maven.plugins.it;
+package com.jeecookbook.maven.plugins.solc.it;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Rule;
 import org.junit.Test;
-import com.jeecookbook.maven.plugins.CheckMojo;
+import com.jeecookbook.maven.plugins.solc.CheckMojo;
 import org.junit.rules.ExpectedException;
 
 import java.util.UUID;

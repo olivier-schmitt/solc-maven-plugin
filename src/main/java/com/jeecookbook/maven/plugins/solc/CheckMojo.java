@@ -1,4 +1,4 @@
-package com.jeecookbook.maven.plugins;
+package com.jeecookbook.maven.plugins.solc;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.

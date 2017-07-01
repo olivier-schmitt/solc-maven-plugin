@@ -71,7 +71,7 @@ contract Purchase {
     {
         ItemReceived();
         // It is important to change the state first because
-        // otherwise, the contracts called using `send` below
+        // otherwise, the solc called using `send` below
         // can call in again here.
         state = State.Inactive;
 

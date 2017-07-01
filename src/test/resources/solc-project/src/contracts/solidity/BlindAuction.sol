@@ -99,7 +99,7 @@ contract BlindAuction {
 
     // This is an "internal" function which means that it
     // can only be called from the contract itself (or from
-    // derived contracts).
+    // derived solc).
     function placeBid(address bidder, uint value) internal
     returns (bool success)
     {
