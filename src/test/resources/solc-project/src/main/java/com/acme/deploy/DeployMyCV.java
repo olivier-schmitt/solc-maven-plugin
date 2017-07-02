@@ -28,15 +28,24 @@ public class DeployMyCV {
         Parity parity = Parity.build(new HttpService());  // defaults to http://localhost:8545/
 
         PersonalUnlockAccount personalUnlockAccount = parity.personalUnlockAccount(
-                "0x38d8c1b1382249e1567af808f3f70a022cca733f"
+                //"0x38d8c1b1382249e1567af808f3f70a022cca733f"
+                "0x814ae26aa441b46530fd15f7a22ecd2965ad5100"
                 , PASSWORD)
                 .send();
 
         if (personalUnlockAccount.accountUnlocked()) {
 
+
+            String ETH_HOME = "/Users/oschmitt/ethereum/1.6.6";//System.getenv("ETH_HOME");
+            /*
             Credentials credentials = WalletUtils.loadCredentials(
                     "password",
                     "/home/olivierschmitt/java/poc/block/chains/keystore/UTC--2017-06-13T09-16-32.804957175Z--38d8c1b1382249e1567af808f3f70a022cca733f");
+
+            */
+            Credentials credentials = WalletUtils.loadCredentials(
+                    "password",
+                    ETH_HOME + "/data/keystore/UTC--2017-07-01T16-32-38.594279530Z--814ae26aa441b46530fd15f7a22ecd2965ad5100");
 
 
             BigInteger gasPrice = GAS_PRICE;

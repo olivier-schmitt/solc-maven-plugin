@@ -52,13 +52,14 @@
                                 <include>**/*.sol</include>
                             </includes>
                         </fileset>
+                         -->
                         <fileset>
-                            <directory>src/solc/solidity</directory>
+                            <directory>src/contracts/solidity</directory>
                             <includes>
                                 <include>**/*.sol</include>
                             </includes>
                         </fileset>
-                        -->
+
                     </sources>
                 </configuration>
             </plugin>
