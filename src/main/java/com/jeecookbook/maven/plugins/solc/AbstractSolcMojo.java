@@ -1,7 +1,27 @@
+/*-
+ * -\-\-
+ * solc-maven-plugin
+ * --
+ * Copyright (C) 2017 jeecookbook.blogger.com
+ * --
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -/-/-
+ */
+
 package com.jeecookbook.maven.plugins.solc;
 
-import com.jeecookbook.maven.plugins.solc.eth.model.Account;
-import com.jeecookbook.maven.plugins.solc.eth.model.Wallet;
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridgeImpl;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.model.fileset.FileSet;
@@ -10,7 +30,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public abstract class AbstractSolcMojo extends AbstractMojo {
+
+    protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     @Parameter(defaultValue = "solc")
     private String compilerCmdPath;
@@ -54,33 +79,12 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     @Parameter(defaultValue = "http://localhost:8545")
     private String web3Endpoint;
 
-    @Parameter
-    private Account account = new Account();
-
-    @Parameter
-    private Wallet wallet = new Wallet();
 
     @Parameter
     private String wrapOutputDirectory;
     
     @Parameter(defaultValue = "${project.groupId}")
     private String targetPackage;
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
-    }
 
     public void setWrapOutputDirectory(String wrapOutputDirectory) {
         this.wrapOutputDirectory = wrapOutputDirectory;

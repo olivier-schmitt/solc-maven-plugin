@@ -18,29 +18,20 @@
  * -/-/-
  */
 
-package com.jeecookbook.maven.plugins.solc.it;
+package com.jeecookbook.maven.plugins.solc;
 
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.junit.Rule;
-import org.junit.Test;
-import com.jeecookbook.maven.plugins.solc.CheckMojo;
-import org.junit.rules.ExpectedException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
 
-import java.util.UUID;
+@Mojo( name = "help")
+public class HelpMojo extends AbstractMojo {
 
-
-public class CheckMojoTestCaseIT {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    @Test
-    public void testBadCmd() throws MojoExecutionException {
-
-        thrown.expect(MojoExecutionException.class);
-
-        CheckMojo checkMojo = new CheckMojo();
-        checkMojo.setCompilerCmdPath(UUID.randomUUID().toString());
-        checkMojo.execute();
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        getLog().info("This plugin supports solc compiler from 0.4.11 version to above.");
+        getLog().info("This plugin supports web3j wrapper generation.");
+        getLog().info("Supported compîler options are :" + CompileMojo.getSupportedOptions());
     }
 }

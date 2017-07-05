@@ -30,14 +30,6 @@
                     <wrapOutputDirectory>src/main/java</wrapOutputDirectory>
                     <compilerVersion>0.4.11</compilerVersion>
                     <overwrite>true</overwrite>
-                    <account>
-                        <publicKey>0x38d8c1b1382249e1567af808f3f70a022cca733f</publicKey>
-                        <password>password</password>
-                    </account>
-                    <wallet>
-                        <path>/home/olivierschmitt/java/poc/block/chains/keystore/UTC--2017-06-13T09-16-32.804957175Z--38d8c1b1382249e1567af808f3f70a022cca733f</path>
-                        <password>password</password>
-                    </wallet>
                     <sources>
                         <fileset>
                             <directory>src/contracts/basic</directory>

@@ -1,7 +1,26 @@
+/*-
+ * -\-\-
+ * solc-maven-plugin
+ * --
+ * Copyright (C) 2017 jeecookbook.blogger.com
+ * --
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -/-/-
+ */
+
 package com.jeecookbook.maven.plugins.solc;
 
-import com.jeecookbook.maven.plugins.solc.CompileMojo;
-import com.jeecookbook.maven.plugins.solc.CompilerBridge;
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
@@ -9,10 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -57,22 +72,6 @@ public class CompileMojoTestCase {
         assertEquals(cmd,"solc -o target/solc --abi --asm --asm-json --ast --ast-json --bin --formal --hashes ");
     }
 
-    class FakeCompilerBridge implements CompilerBridge {
-
-        CompilerResult compilerResult;
-        List<String> cmds = new ArrayList<String>();
-
-        public FakeCompilerBridge(CompilerResult compilerResult){
-            this.compilerResult = compilerResult;
-        }
-
-        public CompilerBridge.CompilerResult executeCmd(String cmd) {
-            this.cmds.add(cmd);
-            return this.compilerResult;
-        }
-    };
-
-
     @Test
     public void testProcessSourceSet() throws MojoExecutionException {
 
@@ -105,13 +104,14 @@ public class CompileMojoTestCase {
         CompileMojo compileMojo = new CompileMojo();
         compileMojo.setCompilerCmdPath("solc");
 
-        CompilerBridge.CompilerResult result = new CompilerBridge.CompilerResult();
-        result.setThrowable(null);
-        result.setStatus(0);
-        result.setSuccess(true);
-        result.setOutput("");
+        CompilerBridge.CompilerResult compilerResult = FakeCompilerBridge.build(
+                0,
+                true,
+                "",
+                null);
 
-        FakeCompilerBridge fakeCompilerBridge = new FakeCompilerBridge(result);
+
+        FakeCompilerBridge fakeCompilerBridge = new FakeCompilerBridge(compilerResult);
 
         compileMojo.compilerBridge = fakeCompilerBridge;
 

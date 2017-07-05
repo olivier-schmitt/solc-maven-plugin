@@ -1,8 +1,9 @@
-package com.jeecookbook.maven.plugins.solc;
-
-/*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
+/*-
+ * -\-\-
+ * solc-maven-plugin
+ * --
+ * Copyright (C) 2017 jeecookbook.blogger.com
+ * --
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,20 +15,27 @@ package com.jeecookbook.maven.plugins.solc;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * -/-/-
  */
 
+package com.jeecookbook.maven.plugins.solc;
+
+
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridgeImpl;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 
-import java.io.*;
-
 /**
  * Goal which check SOLC version.
- *
+ * If the versions match then the mojo will produce a log info.
+ * If not, a MojoException is thrown.
+ * The mojo uses the compiler's command path to build the command line, it appends the --version option after it.
  */
 @Mojo( name = "check")
 public class CheckMojo extends AbstractSolcMojo {
 
+    protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     public void execute() throws MojoExecutionException {
         try {
@@ -35,9 +43,13 @@ public class CheckMojo extends AbstractSolcMojo {
             getLog().debug("Overwrite :" + getOverwrite());
             boolean healthy = performCheck();
             if (healthy) {
-                getLog().info("Compiler's version is fine (" + getCompilerVersion() + ")");
+                getLog().info(String.format("Compiler's version is fine (%s)",getCompilerVersion()));
             } else {
-                throw new MojoExecutionException("Check has failed, " + getCompilerVersion() + " is required. Check your SOLC command path.");
+                throw new MojoExecutionException(
+                        String.format(
+                                "Check has failed, %s is required. Check your SOLC command path.",
+                                getCompilerVersion())
+                        );
             }
         } finally {
             getLog().debug( "Exiting check mojo." );
@@ -45,33 +57,28 @@ public class CheckMojo extends AbstractSolcMojo {
     }
 
     public boolean performCheck() throws MojoExecutionException {
-
-        try {
-            Process process = Runtime.getRuntime().exec(buildCmdVersion());
-            int status = process.waitFor();
-            if(status == 0){
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line = null;
-                StringBuffer sb = new StringBuffer();
-                while((line = bufferedReader.readLine())!=null){
-                    getLog().info(line);
-                    sb.append(line).append("\n");
-                }
-                return sb.toString().contains(getCompilerVersion());
-            } else {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                String line = null;
-                StringBuffer sb = new StringBuffer();
-                while((line = bufferedReader.readLine())!=null){
-                    getLog().error(line);
-                    sb.append(line).append("\n");
-                }
+        String cmd = buildCmdVersion();
+        CompilerBridge.CompilerResult compilerResult = this.compilerBridge.executeCmd(cmd);
+        String output = compilerResult.getOutput();
+        if(compilerResult.isSuccess()){
+            if(output == null){
                 return false;
+            } else {
+                getLog().debug(output);
+                return output.contains(this.getCompilerVersion());
             }
-        } catch (Exception e) {
-            throw new MojoExecutionException(e.getMessage(),e);
+        } else {
+            if(compilerResult.getThrowable() != null){
+                getLog().error(compilerResult.getThrowable());
+                String msg = compilerResult.getThrowable().getMessage();
+                throw new MojoExecutionException(msg);
+            }
+            if(output != null){
+                getLog().error(output);
+            }
+            getLog().error(String.format("Compiler exit with status %s",compilerResult.getStatus()));
+            return false;
         }
-
     }
 
     private String buildCmdVersion() {

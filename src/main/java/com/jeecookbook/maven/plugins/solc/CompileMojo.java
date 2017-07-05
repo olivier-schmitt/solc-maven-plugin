@@ -1,3 +1,24 @@
+/*-
+ * -\-\-
+ * solc-maven-plugin
+ * --
+ * Copyright (C) 2017 jeecookbook.blogger.com
+ * --
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * -/-/-
+ */
+
+
 package com.jeecookbook.maven.plugins.solc;
 
 /*
@@ -16,6 +37,7 @@ package com.jeecookbook.maven.plugins.solc;
  * limitations under the License.
  */
 
+import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -30,8 +52,6 @@ import java.io.File;
  */
 @Mojo( name = "compile")
 public class CompileMojo extends AbstractSolcMojo {
-
-    protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     public void execute() throws MojoExecutionException {
         try {
@@ -85,21 +105,37 @@ public class CompileMojo extends AbstractSolcMojo {
             getLog().info(compilerResult.getOutput());
         } else {
             if(compilerResult.getThrowable() != null){
-                //getLog().error(compilerResult.getThrowable().getMessage());
                 getLog().error(compilerResult.getThrowable());
             }
             getLog().error(compilerResult.getOutput());
             getLog().error("Compiler exit with status " +compilerResult.getStatus());
         }
-
     }
 
+    public static String getSupportedOptions(){
+        StringBuilder options = new StringBuilder();
+        options
+                .append("-o ")
+                .append("--overwrite ")
+                .append("--abi ")
+                .append("--asm-json ")
+                .append("--ast ")
+                .append("--ast-json ")
+                .append("--bin ")
+                .append("--formal ")
+                .append("--hashes ");
+        return options.toString();
+    }
 
     protected String buildCmd(String basePath) {
+
         StringBuilder cmBuilder = new StringBuilder();
-        cmBuilder.append(getCompilerCmdPath())
+
+        cmBuilder
+                .append(getCompilerCmdPath())
                 .append(" ")
                 ;
+
         String outputDir = basePath + File.separator + "solc";
 
         new File(outputDir).mkdirs();

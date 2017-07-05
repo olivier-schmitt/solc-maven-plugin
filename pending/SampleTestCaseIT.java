@@ -12,7 +12,7 @@ import java.util.List;
 public class SampleTestCaseIT extends TestCase {
 
 
-    public void testMyPlugin() throws Exception {
+    public void myPlugin() throws Exception {
 
         // Check in your dummy Maven project in /src/test/resources/...
         // The testdir is computed from the location of this
@@ -29,7 +29,7 @@ public class SampleTestCaseIT extends TestCase {
         verifier.executeGoal("solc:check");
 
         verifier.verifyErrorFreeLog();
-        verifier.verifyTextInLog("solc, the solidity compiler commandline interface");
+        verifier.verifyTextInLog("[INFO] Compiler's version is fine");
 
         List<String> lines = getStrings(verifier);
 

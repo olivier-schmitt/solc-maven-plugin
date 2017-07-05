@@ -1,8 +1,9 @@
-package com.jeecookbook.maven.plugins.solc;
-
-/*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
+/*-
+ * -\-\-
+ * solc-maven-plugin
+ * --
+ * Copyright (C) 2017 jeecookbook.blogger.com
+ * --
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,7 +15,11 @@ package com.jeecookbook.maven.plugins.solc;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * -/-/-
  */
+
+package com.jeecookbook.maven.plugins.solc;
+
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -27,7 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Goal which compile SOL files.
+ * Goal which generates Java wrappers from bin and abi files.
+ * It uses web3j wrapping features to generate Java classes.
  *
  */
 @Mojo( name = "wrap")
@@ -55,7 +61,6 @@ public class WrapMojo extends AbstractSolcMojo {
             if(hasErrors){
                 throw new MojoExecutionException("Wrapper failed.");
             }
-
         } finally {
             getLog().debug( "Exiting wrapping mojo." );
         }
@@ -110,8 +115,4 @@ public class WrapMojo extends AbstractSolcMojo {
         }
         return binsForSols;
     }
-
-
-
-
 }
