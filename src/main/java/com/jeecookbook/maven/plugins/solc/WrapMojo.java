@@ -34,15 +34,31 @@ import java.util.Map;
 /**
  * Goal which generates Java wrappers from bin and abi files.
  * It uses web3j wrapping features to generate Java classes.
- *
  */
-@Mojo( name = "wrap")
+@Mojo(name = "wrap")
 public class WrapMojo extends AbstractSolcMojo {
 
 
-    class BinAndAbi {
+    static class BinAndAbi {
+
         private String bin;
         private String abi;
+
+        public BinAndAbi() {
+        }
+
+        public BinAndAbi(String bin, String abi) {
+            this.bin = bin;
+            this.abi = abi;
+        }
+
+        public String getBin() {
+            return bin;
+        }
+
+        public String getAbi() {
+            return abi;
+        }
     }
 
     public void execute() throws MojoExecutionException {
@@ -52,24 +68,27 @@ public class WrapMojo extends AbstractSolcMojo {
             FileSet defaultBinsFileSet = createDefaultBinsFileSet();
             String basePath = defaultBinsFileSet.getDirectory();
             String outputDir = getWrapOutputDirectory();
-            Map<String,BinAndAbi> binsForSols = computeBinsForSols(defaultBinsFileSet, basePath, outputDir);
+            Map<String, BinAndAbi> binsForSols = computeBinsForSols(defaultBinsFileSet, basePath, outputDir);
             boolean hasErrors = false;
-            for(String solFile : binsForSols.keySet()){
+            for (String solFile : binsForSols.keySet()) {
                 BinAndAbi binAndAbi = binsForSols.get(solFile);
                 hasErrors = generateWrapper(outputDir, binAndAbi);
             }
-            if(hasErrors){
+            if (hasErrors) {
                 throw new MojoExecutionException("Wrapper failed.");
             }
         } finally {
-            getLog().debug( "Exiting wrapping mojo." );
+            getLog().debug("Exiting wrapping mojo.");
         }
     }
 
-    protected boolean generateWrapper(String outputDir, BinAndAbi binAndAbi) {
+    protected boolean generateWrapper(String outputDir, BinAndAbi binAndAbi) throws MojoExecutionException {
         boolean hasErrors = false;
-        getLog().debug("Generate wrapper for : " + binAndAbi.abi + ", " + binAndAbi.bin );
-        if(binAndAbi != null) {
+        if (getTargetPackage() == null) {
+            throw new MojoExecutionException("Target package is null.");
+        }
+        getLog().debug("Generate wrapper for : " + binAndAbi.abi + ", " + binAndAbi.bin);
+        if (binAndAbi != null) {
             try {
                 SolidityFunctionWrapperGenerator.main(
                         new String[]{
@@ -89,26 +108,26 @@ public class WrapMojo extends AbstractSolcMojo {
         return hasErrors;
     }
 
-    protected Map<String,BinAndAbi>  computeBinsForSols(FileSet defaultBinsFileSet, String basePath, String outputDir) {
-        Map<String,BinAndAbi> binsForSols = new HashMap<String,BinAndAbi>();
-        if(defaultBinsFileSet != null) {
+    protected Map<String, BinAndAbi> computeBinsForSols(FileSet defaultBinsFileSet, String basePath, String outputDir) {
+        Map<String, BinAndAbi> binsForSols = new HashMap<>();
+        if (defaultBinsFileSet != null) {
             FileSetManager fileSetManager = new FileSetManager();
-            String[] includedFiles = fileSetManager.getIncludedFiles( defaultBinsFileSet );
+            String[] includedFiles = fileSetManager.getIncludedFiles(defaultBinsFileSet);
             new File(outputDir).mkdirs();
-            for(String include:includedFiles){
+            for (String include : includedFiles) {
                 String file = basePath
-                        + File.separator + include;
+                        + File.separator
+                        + include;
                 getLog().debug("Included file : " + file);
                 String solFile = extractSolFile(file);
                 BinAndAbi binAndAbi = binsForSols.get(solFile);
-                if(binAndAbi == null){
+                if (binAndAbi == null) {
                     binAndAbi = new BinAndAbi();
-                    binsForSols.put(solFile,binAndAbi);
+                    binsForSols.put(solFile, binAndAbi);
                 }
-                if(file.endsWith(".bin")){
+                if (file.endsWith(".bin")) {
                     binAndAbi.bin = file;
-                }
-                else if(file.endsWith(".abi")){
+                } else if (file.endsWith(".abi")) {
                     binAndAbi.abi = file;
                 }
             }
