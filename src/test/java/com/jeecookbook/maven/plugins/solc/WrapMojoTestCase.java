@@ -36,9 +36,9 @@ import static org.junit.Assert.*;
 public class WrapMojoTestCase {
 
     public static final String SRC_TEST_RESOURCES_SOLC = "src/test/resources/solc";
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    private String currentPath;
 
     @Test
     public void testBuildDefaultCmd() throws MojoExecutionException {
