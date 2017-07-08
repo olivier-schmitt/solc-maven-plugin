@@ -39,6 +39,7 @@ package com.jeecookbook.maven.plugins.solc;
 
 import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import org.apache.maven.shared.model.fileset.FileSet;
@@ -50,7 +51,7 @@ import java.io.File;
  * Goal which compile SOL files.
  *
  */
-@Mojo( name = "compile")
+@Mojo( name = "compile",defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
 public class CompileMojo extends AbstractSolcMojo {
 
     public void execute() throws MojoExecutionException {
@@ -94,11 +95,11 @@ public class CompileMojo extends AbstractSolcMojo {
                     .append(include)
                     .append(" ");
 
-            getLog().debug("Included file :" + basePath + File.separator + include);
+            getLog().info("Included file :" + basePath + File.separator + include);
         }
         String cmdExec = cmdBuilder.toString();
 
-        getLog().debug(" Cmd is " + cmdExec);
+        getLog().debug("Cmd is " + cmdExec);
 
         CompilerBridge.CompilerResult compilerResult = compilerBridge.executeCmd(cmdExec);
         if(compilerResult.isSuccess()){
@@ -136,7 +137,7 @@ public class CompileMojo extends AbstractSolcMojo {
                 .append(" ")
                 ;
 
-        String outputDir = basePath + File.separator + "solc";
+        String outputDir = basePath + SOLC_OUTPUT;
 
         new File(outputDir).mkdirs();
 

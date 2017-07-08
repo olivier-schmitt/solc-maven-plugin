@@ -6,10 +6,13 @@
 [![License](https://img.shields.io/github/license/spotify/docker-client.svg)](LICENSE)
 
 This is a [Solc](https://github.com/ethereum/solc) Maven plugin written in Java.
-It is used it in many critical production systems at Spotify.
 
-* [Version compatibility](#version-compatibility)
-* [Example](#exemple)
+The plugin supports the following goals : 
+
+* **help**: display help 
+* **check**: check the Solc's version declared in your POM against the Solc version running on your system
+* **compile**: compile Solidity file into what Solc compiler is capable of (abi, bin, ...)
+* **wrap**: generate Java wrapper by leveraging web3j library (needs abi and bin files compiled from your contracts)
 
 ## Version compatibility
 solc-maven-plugin is built and tested against the most recent releases of Solc.

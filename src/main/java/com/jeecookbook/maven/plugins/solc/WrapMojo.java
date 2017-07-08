@@ -22,6 +22,7 @@ package com.jeecookbook.maven.plugins.solc;
 
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.shared.model.fileset.FileSet;
 import org.apache.maven.shared.model.fileset.util.FileSetManager;
@@ -35,9 +36,8 @@ import java.util.Map;
  * Goal which generates Java wrappers from bin and abi files.
  * It uses web3j wrapping features to generate Java classes.
  */
-@Mojo(name = "wrap")
+@Mojo(name = "wrap", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class WrapMojo extends AbstractSolcMojo {
-
 
     static class BinAndAbi {
 

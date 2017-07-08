@@ -35,6 +35,7 @@ import java.util.List;
  */
 public abstract class AbstractSolcMojo extends AbstractMojo {
 
+    public static final String SOLC_OUTPUT = File.separator + "solc";
     protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     @Parameter(defaultValue = "solc")
@@ -217,7 +218,7 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
 
     protected FileSet createDefaultBinsFileSet() {
         FileSet solcFileSet = new FileSet();
-        solcFileSet.setDirectory(getOutputDirectory()+"/solc");
+        solcFileSet.setDirectory(getOutputDirectory()+ SOLC_OUTPUT);
         List<String> solcBins = new ArrayList<String>();
         solcBins.add("**/*.abi");
         solcBins.add("**/*.bin");

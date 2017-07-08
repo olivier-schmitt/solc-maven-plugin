@@ -26,6 +26,15 @@
                 <groupId>com.jeecookbook</groupId>
                 <artifactId>solc-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>wrap</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <wrapOutputDirectory>src/main/java</wrapOutputDirectory>
                     <compilerVersion>0.4.11</compilerVersion>
@@ -37,21 +46,19 @@
                                 <include>**/*.sol</include>
                             </includes>
                         </fileset>
-                        <!--
+
                         <fileset>
-                            <directory>src/solc/udemy</directory>
+                            <directory>src/contracts/udemy</directory>
                             <includes>
                                 <include>**/*.sol</include>
                             </includes>
                         </fileset>
-                         -->
                         <fileset>
                             <directory>src/contracts/solidity</directory>
                             <includes>
                                 <include>**/*.sol</include>
                             </includes>
                         </fileset>
-
                     </sources>
                 </configuration>
             </plugin>
