@@ -89,7 +89,7 @@ public class CompileMojoTestCase {
         compileMojo.compilerBridge = fakeCompilerBridge;
 
         FileSet basicSourceSet = new FileSet();
-        basicSourceSet.setDirectory("src/test/resources/solc-project/src/contracts/basic");
+        basicSourceSet.setDirectory("src/test/resources/contracts/basic");
         basicSourceSet.addInclude("**/*.sol");
 
         compileMojo.processSourceSet(new FileSetManager(),basicSourceSet);
@@ -116,11 +116,11 @@ public class CompileMojoTestCase {
         compileMojo.compilerBridge = fakeCompilerBridge;
 
         FileSet basicSourceSet = new FileSet();
-        basicSourceSet.setDirectory("src/test/resources/solc-project/src/contracts/basic");
+        basicSourceSet.setDirectory("src/test/resources/contracts/basic");
         basicSourceSet.addInclude("**/*.sol");
 
         FileSet soliditySourceSet = new FileSet();
-        soliditySourceSet.setDirectory("src/test/resources/solc-project/src/contracts/solidity");
+        soliditySourceSet.setDirectory("src/test/resources/contracts/solidity");
         soliditySourceSet.addInclude("**/*.sol");
 
         compileMojo.setSources(new FileSet[]{basicSourceSet,soliditySourceSet});

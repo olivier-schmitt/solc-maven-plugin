@@ -1,1 +1,0 @@
-mvn350 solc:deploy
