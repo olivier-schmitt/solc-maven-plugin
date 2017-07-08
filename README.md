@@ -1,4 +1,4 @@
-# Docker Client
+# Solc Maven Plugin
 
 [![License](https://img.shields.io/github/license/spotify/docker-client.svg)](LICENSE)
 
