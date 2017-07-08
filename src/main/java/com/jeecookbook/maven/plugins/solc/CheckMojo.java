@@ -24,6 +24,7 @@ package com.jeecookbook.maven.plugins.solc;
 import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridge;
 import com.jeecookbook.maven.plugins.solc.bridge.CompilerBridgeImpl;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
@@ -32,7 +33,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  * If not, a MojoException is thrown.
  * The mojo uses the compiler's command path to build the command line, it appends the --version option after it.
  */
-@Mojo( name = "check")
+@Mojo( name = "check",defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
 public class CheckMojo extends AbstractSolcMojo {
 
     protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
