@@ -34,7 +34,7 @@ This configures the actual plugin:
                 <version>${solc.plugin.version}</version>
                 <configuration>
                     <wrapOutputDirectory>src/main/java</wrapOutputDirectory>
-                    <compilerVersion>${solc.compiler.version}</compilerVersion>
+                    <compilerVersion>0.4.1</compilerVersion>
                     <overwrite>true</overwrite>
                     <executions>
                         <execution>
