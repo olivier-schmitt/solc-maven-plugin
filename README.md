@@ -18,6 +18,8 @@ The plugin supports the following goals :
 solc-maven-plugin is built and tested against the most recent releases of Solc.
 Right now these are 0.4.11 - ?.
 
+The plugins uses web3j 2.2.2 for Java wrappers generation.
+
 ## Example
 
 This configures the actual plugin:
