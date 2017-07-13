@@ -4,6 +4,8 @@
 
 This is a [Solc](https://github.com/ethereum/solc) Maven plugin written in Java.
 
+Check the wiki to understand its [design principles](https://github.com/olivier-schmitt/solc-maven-plugin/wiki).
+
 **WARNING: the plugin is not deployed on Maven Central yet. You have to build it from sources.**
 
 The plugin supports the following goals : 
