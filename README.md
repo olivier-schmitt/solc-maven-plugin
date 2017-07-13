@@ -1,5 +1,5 @@
 # Solc Maven Plugin
-
+[![Travis CI](https://travis-ci.org/olivier-schmitt/solc-maven-plugin.svg?branch=master)](https://travis-ci.org/olivier-schmitt/solc-maven-plugin/) 
 [![License](https://img.shields.io/github/license/spotify/docker-client.svg)](LICENSE)
 
 This is a [Solc](https://github.com/ethereum/solc) Maven plugin written in Java.
