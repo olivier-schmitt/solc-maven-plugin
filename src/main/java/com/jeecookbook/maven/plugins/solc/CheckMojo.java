@@ -36,8 +36,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 @Mojo( name = "check",defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
 public class CheckMojo extends AbstractSolcMojo {
 
-    protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
-
     public void execute() throws MojoExecutionException {
         try {
             getLog().debug("Entering check mojo.");

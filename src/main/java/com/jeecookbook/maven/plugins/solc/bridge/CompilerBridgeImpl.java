@@ -39,7 +39,7 @@ public class CompilerBridgeImpl implements CompilerBridge {
             if(status == 0){
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line = null;
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 while((line = bufferedReader.readLine())!=null){
                     sb.append(line).append("\n");
                 }
@@ -49,7 +49,7 @@ public class CompilerBridgeImpl implements CompilerBridge {
             } else {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 String line = null;
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 while((line = bufferedReader.readLine())!=null){
                     sb.append(line).append("\n");
                 }
@@ -57,9 +57,9 @@ public class CompilerBridgeImpl implements CompilerBridge {
                 compilerResult.setSuccess(false);
                 return compilerResult;
             }
-        } catch (Throwable throwable) {
+        } catch (Exception exception) {
             compilerResult.setSuccess(false);
-            compilerResult.setThrowable(throwable);
+            compilerResult.setThrowable(exception);
             return compilerResult;
         }
     }

@@ -219,7 +219,7 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     protected FileSet createDefaultBinsFileSet() {
         FileSet solcFileSet = new FileSet();
         solcFileSet.setDirectory(getOutputDirectory()+ SOLC_OUTPUT);
-        List<String> solcBins = new ArrayList<String>();
+        List<String> solcBins = new ArrayList<>();
         solcBins.add("**/*.abi");
         solcBins.add("**/*.bin");
         solcFileSet.setIncludes(solcBins);
@@ -227,7 +227,7 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     }
 
     protected String extractSolFile(String file) {
-        int index = file.lastIndexOf(".");
+        int index = file.lastIndexOf('.');
         return file.substring(0,index);
     }
 }

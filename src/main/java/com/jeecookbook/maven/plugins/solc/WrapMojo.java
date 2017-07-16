@@ -88,22 +88,20 @@ public class WrapMojo extends AbstractSolcMojo {
             throw new MojoExecutionException("Target package is null.");
         }
         getLog().debug("Generate wrapper for : " + binAndAbi.abi + ", " + binAndAbi.bin);
-        if (binAndAbi != null) {
-            try {
-                SolidityFunctionWrapperGenerator.main(
-                        new String[]{
-                                binAndAbi.bin,
-                                binAndAbi.abi,
-                                "-o",
-                                outputDir,
-                                "-p",
-                                getTargetPackage()
-                        }
-                );
-            } catch (Exception e) {
-                getLog().error(e.getMessage());
-                hasErrors = true;
-            }
+        try {
+            SolidityFunctionWrapperGenerator.main(
+                    new String[]{
+                            binAndAbi.bin,
+                            binAndAbi.abi,
+                            "-o",
+                            outputDir,
+                            "-p",
+                            getTargetPackage()
+                    }
+            );
+        } catch (Exception e) {
+            getLog().error(e.getMessage());
+            hasErrors = true;
         }
         return hasErrors;
     }
