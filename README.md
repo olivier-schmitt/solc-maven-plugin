@@ -8,6 +8,8 @@ Check the wiki to understand its [design principles](https://github.com/olivier-
 
 **WARNING: the plugin is not deployed on Maven Central yet. You have to build it from sources.**
 
+**WARNING: The Solc Maven Plugin might merge with the Web3J's Maven plugin (check Design principles).**
+
 The plugin supports the following goals : 
 
 * **help**: display help 
