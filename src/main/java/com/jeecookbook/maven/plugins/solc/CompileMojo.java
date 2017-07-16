@@ -50,7 +50,7 @@ public class CompileMojo extends AbstractSolcMojo {
     }
 
 
-    protected void processSources() throws MojoExecutionException {
+    protected void processSources() {
         FileSet[] sources = getSources();
         if(sources != null) {
             FileSetManager fileSetManager = new FileSetManager();
