@@ -59,6 +59,7 @@ public class CompilerBridgeImpl implements CompilerBridge {
             }
         } catch (Exception exception) {
             compilerResult.setSuccess(false);
+            compilerResult.setStatus(1);
             compilerResult.setThrowable(exception);
             return compilerResult;
         }
