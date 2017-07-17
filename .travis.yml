@@ -14,7 +14,8 @@ addons:
       secure: "gfcjtmsq6a8EOZhkh+ns5K55CHlLYTuNRq3eZJrl7o0aaXiPDTQwu+f/njxBS7svGgwOePYJeQDv6AJfEn0BAbb32NsXZMYuHouuK58BG0VuBYZdJeVLG26j/u3cw1kOVRhI7pkP1OoP/i38qkvRiSqshoBtZwuxSjUqESQ0tviOvGOd2nJgBjDoTjh/8iA3cJwocG+C38zgKNRh1yM43r7dvTTn3a2NKaHjv7cHNu83SkkOLiqPJFgF0jIYh3i5uWSjxmVUS1ZBrA5DmZwPLFqEKXlI7Qt81FNje+v9vUlhvz4Bvy1QLkvCHi/6IzTcf7FRy/RsKRLj4e4nXkcqtJnMbD4qZ5mpLQ75U5LzNEEWw2RUQZVZHVtIsMrU4VKGiJqQXZY7aDgyunmjDVSYyoxesugAOcycRHYbRtfKvZfmUEI6crw7w/CVHK0fZKpwIQClGKdoGAWfnDlZWMPU7HbmeKGRiWObX0G6Tl6JAbMN1BA1Z31Y+a+IMapS9KyVpBw+x+GNRdkd6sDRpYgu6IyJ3oJcgNvG/tLQQnpq1yMsQdKemQvP7kFJWj5qXIiHCq73btzD4IlMOvljp5juHgfru/I8jzxYe/1Pp/Ck3BibXkfNAhSWto5Py7bmU0v4y0Pw8IWx9cIoQmK3wxYjhYnynxWBgmCL8Ed2nbl0a+k="
 
 before_install:
-  - sudo curl -L https://github.com/ethereum/solidity/releases/download/v0.4.13/solc-static-linux > /usr/bin/solc
+  - curl -L https://github.com/ethereum/solidity/releases/download/v0.4.13/solc-static-linux > ${PWD}/solc
+  - sudo mv ${PWD}/solc /usr/bin/solc
   - solc --version
 
 script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent  install sonar:sonar
