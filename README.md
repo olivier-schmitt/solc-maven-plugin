@@ -2,7 +2,8 @@
 [![Travis CI](https://travis-ci.org/olivier-schmitt/solc-maven-plugin.svg?branch=master)](https://travis-ci.org/olivier-schmitt/solc-maven-plugin/) 
 [![License](https://img.shields.io/github/license/spotify/docker-client.svg)](LICENSE)
 
-This is a [Solc](https://github.com/ethereum/solc) Maven plugin written in Java.
+
+This is a [Solc](https://github.com/ethereum/solc) Maven plugin written in Java (Sonar [analysis](https://sonarcloud.io/dashboard?id=com.jeecookbook%3Asolc-maven-plugin)).
 
 Check the wiki to understand its [design principles](https://github.com/olivier-schmitt/solc-maven-plugin/wiki).
 
