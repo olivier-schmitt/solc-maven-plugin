@@ -36,6 +36,7 @@ import java.util.List;
 public abstract class AbstractSolcMojo extends AbstractMojo {
 
     public static final String SOLC_OUTPUT = File.separator + "solc";
+
     protected CompilerBridge compilerBridge = new CompilerBridgeImpl();
 
     @Parameter(defaultValue = "solc")
@@ -86,6 +87,18 @@ public abstract class AbstractSolcMojo extends AbstractMojo {
     
     @Parameter(defaultValue = "${project.groupId}")
     private String targetPackage;
+
+
+    @Parameter(defaultValue = "true")
+    private Boolean preserveContractsPaths;
+
+    public Boolean getPreserveContractsPaths() {
+        return preserveContractsPaths;
+    }
+
+    public void setPreserveContractsPaths(Boolean preserveContractsPaths) {
+        this.preserveContractsPaths = preserveContractsPaths;
+    }
 
     public void setWrapOutputDirectory(String wrapOutputDirectory) {
         this.wrapOutputDirectory = wrapOutputDirectory;

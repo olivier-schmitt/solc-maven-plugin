@@ -72,7 +72,7 @@ public class WrapMojo extends AbstractSolcMojo {
             boolean hasErrors = false;
             for (String solFile : binsForSols.keySet()) {
                 BinAndAbi binAndAbi = binsForSols.get(solFile);
-                hasErrors = generateWrapper(outputDir, binAndAbi);
+                hasErrors = generateWrapper(defaultBinsFileSet.getDirectory(),outputDir, binAndAbi);
             }
             if (hasErrors) {
                 throw new MojoExecutionException("Wrapper failed.");
@@ -82,26 +82,68 @@ public class WrapMojo extends AbstractSolcMojo {
         }
     }
 
-    protected boolean generateWrapper(String outputDir, BinAndAbi binAndAbi) throws MojoExecutionException {
+    protected boolean generateWrapper(String binAndAbiRootDir, String outputDir, BinAndAbi binAndAbi) throws MojoExecutionException {
         boolean hasErrors = false;
-        if (getTargetPackage() == null) {
-            throw new MojoExecutionException("Target package is null.");
-        }
         getLog().debug("Generate wrapper for : " + binAndAbi.abi + ", " + binAndAbi.bin);
-        try {
-            SolidityFunctionWrapperGenerator.main(
-                    new String[]{
+
+
+        if(Boolean.TRUE.equals(getPreserveContractsPaths())){
+            String targetPkg = binAndAbi.abi.replace(binAndAbiRootDir+"/","");
+            targetPkg = targetPkg.substring(0,targetPkg.lastIndexOf("/")).replace("/",".");
+            try {
+                String options[] = null;
+                if(targetPkg.isEmpty()){
+                    options = new String[]{
                             binAndAbi.bin,
                             binAndAbi.abi,
                             "-o",
                             outputDir,
                             "-p",
                             getTargetPackage()
-                    }
-            );
-        } catch (Exception e) {
-            getLog().error(e.getMessage());
-            hasErrors = true;
+
+                    };
+                }
+                else {
+                    options = new String[]{
+                            binAndAbi.bin,
+                            binAndAbi.abi,
+                            "-o",
+                            outputDir,
+                            "-p",
+                            targetPkg
+
+                    };
+                }
+
+                SolidityFunctionWrapperGenerator.main(options);
+
+            } catch (Exception e) {
+                getLog().error(e.getMessage());
+                hasErrors = true;
+            }
+
+        }
+        else {
+            if(getTargetPackage() == null){
+                throw new MojoExecutionException("Target package is null.");
+            }
+            else {
+                try {
+                    SolidityFunctionWrapperGenerator.main(
+                            new String[]{
+                                    binAndAbi.bin,
+                                    binAndAbi.abi,
+                                    "-o",
+                                    outputDir,
+                                    "-p",
+                                    getTargetPackage()
+                            }
+                    );
+                } catch (Exception e) {
+                    getLog().error(e.getMessage());
+                    hasErrors = true;
+                }
+            }
         }
         return hasErrors;
     }

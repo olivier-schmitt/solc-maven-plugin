@@ -37,6 +37,8 @@ public class WrapMojoTestCase {
 
     public static final String SRC_TEST_RESOURCES_SOLC = "src/test/resources/solc";
 
+    public static final String SRC_TEST_RESOURCES_SOLCP = "src/test/resources/solcp";
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -46,7 +48,7 @@ public class WrapMojoTestCase {
         WrapMojo wrapMojo = new WrapMojo();
         File outputFile = new File("target/test");
         outputFile.mkdirs();
-        FileSet defaultFileSet = createDefaultBinsFileSet();
+        FileSet defaultFileSet = createSimpleSolcBinsFileSet();
         Map<String, WrapMojo.BinAndAbi> result = wrapMojo.computeBinsForSols(
                 defaultFileSet,
                 defaultFileSet.getDirectory(),
@@ -58,6 +60,33 @@ public class WrapMojoTestCase {
         assertTrue(binAndAbi.getBin().endsWith("/SimpleStorage.bin") );
         assertTrue(binAndAbi.getAbi().endsWith("/SimpleStorage.abi") );
 
+    }
+
+    @Test
+    public void testGenerateWrapperWithPathPreservation() throws MojoExecutionException {
+        WrapMojo wrapMojo = new WrapMojo();
+        wrapMojo.setTargetPackage("test");
+        File outputFile = new File("target/test");
+        outputFile.mkdirs();
+        FileSet defaultFileSet = createPreserveSolcBinsFileSet();
+        wrapMojo.setSources(new FileSet[]{defaultFileSet});
+        Map<String, WrapMojo.BinAndAbi> result = wrapMojo.computeBinsForSols(
+                defaultFileSet,
+                defaultFileSet.getDirectory(),
+                outputFile.getAbsolutePath());
+        assertNotNull(result);
+        String key = result.keySet().iterator().next();
+        WrapMojo.BinAndAbi binAndAbi = result.get(key);
+
+        wrapMojo.setPreserveContractsPaths(true);
+
+        boolean hasErrors = wrapMojo.generateWrapper(defaultFileSet.getDirectory(),
+                outputFile.getAbsolutePath(),binAndAbi);
+        assertFalse(hasErrors);
+
+        File wrappedSol = new File(outputFile,"solidity/sample/Ballot.java");
+        assertTrue(wrappedSol.exists());
+        wrappedSol.deleteOnExit();
     }
 
     @Test
@@ -74,7 +103,7 @@ public class WrapMojoTestCase {
                 "./SimpleStorage.bin",
                 "./SimpleStorage.abi");
 
-        wrapMojo.generateWrapper(outputFile.getAbsolutePath(),binAndAbi);
+        wrapMojo.generateWrapper(null,outputFile.getAbsolutePath(),binAndAbi);
     }
 
     @Test
@@ -82,7 +111,7 @@ public class WrapMojoTestCase {
         WrapMojo wrapMojo = new WrapMojo();
         File outputFile = new File("target/test");
         outputFile.mkdirs();
-        FileSet defaultFileSet = createDefaultBinsFileSet();
+        FileSet defaultFileSet = createSimpleSolcBinsFileSet();
         Map<String, WrapMojo.BinAndAbi> result = wrapMojo.computeBinsForSols(
                 defaultFileSet,
                 defaultFileSet.getDirectory(),
@@ -93,8 +122,8 @@ public class WrapMojoTestCase {
 
         wrapMojo.setTargetPackage("test");
 
-        boolean success = wrapMojo.generateWrapper(outputFile.getAbsolutePath(),binAndAbi);
-        assertFalse(success);
+        boolean hasErrors = wrapMojo.generateWrapper(defaultFileSet.getDirectory(),outputFile.getAbsolutePath(),binAndAbi);
+        assertFalse(hasErrors);
 
         File wrappedSol = new File(outputFile,"test/SimpleStorage.java");
         assertTrue(wrappedSol.exists());
@@ -117,9 +146,19 @@ public class WrapMojoTestCase {
     }
 
 
-    protected static FileSet createDefaultBinsFileSet() {
+    protected static FileSet createSimpleSolcBinsFileSet() {
         FileSet solcFileSet = new FileSet();
         solcFileSet.setDirectory(SRC_TEST_RESOURCES_SOLC);
+        List<String> solcBins = new ArrayList<String>();
+        solcBins.add("**/*.abi");
+        solcBins.add("**/*.bin");
+        solcFileSet.setIncludes(solcBins);
+        return solcFileSet;
+    }
+
+    protected static FileSet createPreserveSolcBinsFileSet() {
+        FileSet solcFileSet = new FileSet();
+        solcFileSet.setDirectory(SRC_TEST_RESOURCES_SOLCP);
         List<String> solcBins = new ArrayList<String>();
         solcBins.add("**/*.abi");
         solcBins.add("**/*.bin");
