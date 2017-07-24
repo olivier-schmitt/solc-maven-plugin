@@ -70,8 +70,8 @@ public class WrapMojo extends AbstractSolcMojo {
             String outputDir = getWrapOutputDirectory();
             Map<String, BinAndAbi> binsForSols = computeBinsForSols(defaultBinsFileSet, basePath, outputDir);
             boolean hasErrors = false;
-            for (String solFile : binsForSols.keySet()) {
-                BinAndAbi binAndAbi = binsForSols.get(solFile);
+            for (Map.Entry<String,BinAndAbi> entry : binsForSols.entrySet()) {
+                BinAndAbi binAndAbi = entry.getValue();
                 hasErrors = generateWrapper(defaultBinsFileSet.getDirectory(),outputDir, binAndAbi);
             }
             if (hasErrors) {
@@ -88,10 +88,12 @@ public class WrapMojo extends AbstractSolcMojo {
 
 
         if(Boolean.TRUE.equals(getPreserveContractsPaths())){
-            String targetPkg = binAndAbi.abi.replace(binAndAbiRootDir+"/","");
-            targetPkg = targetPkg.substring(0,targetPkg.lastIndexOf("/")).replace("/",".");
+            String targetPkg = binAndAbi.abi.replace(binAndAbiRootDir+'/',"");
+            targetPkg = targetPkg
+                    .substring(0,targetPkg.lastIndexOf('/'))
+                    .replace('/','.');
             try {
-                String options[] = null;
+                String[] options = null;
                 if(targetPkg.isEmpty()){
                     options = new String[]{
                             binAndAbi.bin,
