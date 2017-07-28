@@ -7,16 +7,28 @@
     <artifactId>solc-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <web3j.version>2.3.0</web3j.version>
+    </properties>
 
     <name>Solc Maven Plugin</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/olivier-schmitt/solc-maven-plugin</url>
+
+    <developers>
+        <developer>
+            <id>olivier.schmitt</id>
+            <name>Olivier SCHMITT</name>
+            <organizationUrl>https://github.com/olivier-schmitt</organizationUrl>
+            <url>https://www.linkedin.com/in/olivier-schmitt-227b544/</url>
+        </developer>
+    </developers>
 
     <dependencies>
 
         <dependency>
             <groupId>org.web3j</groupId>
             <artifactId>core</artifactId>
-            <version>2.2.2</version>
+            <version>${web3j.version}</version>
             <scope>compile</scope>
         </dependency>
 
