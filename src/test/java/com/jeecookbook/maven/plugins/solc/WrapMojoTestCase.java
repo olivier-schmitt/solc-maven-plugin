@@ -84,7 +84,9 @@ public class WrapMojoTestCase {
                 outputFile.getAbsolutePath(),binAndAbi);
         assertFalse(hasErrors);
 
-        File wrappedSol = new File(outputFile,"solidity/sample/BlindAuction.java");
+        String javaPrefixFilename = key.replace("src/test/resources/solcp/solidity/sample/","");
+
+        File wrappedSol = new File(outputFile,"solidity/sample/"+javaPrefixFilename+".java");
         assertTrue(wrappedSol.exists());
         wrappedSol.deleteOnExit();
     }
