@@ -84,7 +84,7 @@ public class WrapMojoTestCase {
                 outputFile.getAbsolutePath(),binAndAbi);
         assertFalse(hasErrors);
 
-        File wrappedSol = new File(outputFile,"solidity/sample/Ballot.java");
+        File wrappedSol = new File(outputFile,"solidity/sample/BlindAuction.java");
         assertTrue(wrappedSol.exists());
         wrappedSol.deleteOnExit();
     }
