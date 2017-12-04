@@ -163,7 +163,9 @@ public class WrapMojo extends AbstractSolcMojo {
                         + include;
                 getLog().debug("Included file : " + file);
                 String solFile = extractSolFile(file);
-                BinAndAbi binAndAbi = binsForSols.get(solFile);
+                BinAndAbi binAndAbi = binsForSols.computeIfAbsent(solFile, f -> {
+                    return null;
+                });
                 if (binAndAbi == null) {
                     binAndAbi = new BinAndAbi();
                     binsForSols.put(solFile, binAndAbi);

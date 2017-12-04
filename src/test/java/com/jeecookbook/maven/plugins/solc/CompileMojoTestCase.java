@@ -44,7 +44,7 @@ public class CompileMojoTestCase {
         String cmd = compileMojo.buildCmd("target");
 
         assertNotNull(cmd);
-        assertEquals(cmd,"null -o target/solc ");
+        assertEquals("null -o target/solc ",cmd);
     }
 
 
@@ -56,7 +56,7 @@ public class CompileMojoTestCase {
 
         String cmd = compileMojo.buildCmd("target");
         assertNotNull(cmd);
-        assertEquals(cmd,"solc -o target/solc ");
+        assertEquals("solc -o target/solc ",cmd);
 
         compileMojo.setAbi(true);
         compileMojo.setAsm(true);
@@ -69,7 +69,7 @@ public class CompileMojoTestCase {
 
         cmd = compileMojo.buildCmd("target");
         assertNotNull(cmd);
-        assertEquals(cmd,"solc -o target/solc --abi --asm --asm-json --ast --ast-json --bin --formal --hashes ");
+        assertEquals("solc -o target/solc --abi --asm --asm-json --ast --ast-json --bin --formal --hashes ",cmd);
     }
 
     @Test
